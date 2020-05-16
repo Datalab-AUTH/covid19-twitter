@@ -30,7 +30,7 @@ def get_tweets_per_day_csv():
             d[i['created_at'].date()]+=1
         else:
             d[i['created_at'].date()]=1
-    pickle.dump(d,open('tweets','wb'))
+    pickle.dump(d,open('data/tweets','wb'))
 
 def get_tags_per_day_csv():
     d={}
@@ -51,7 +51,7 @@ def get_tags_per_day_csv():
                             d[i['created_at'].date()][h['text']]=1
                     else:
                         d[i['created_at'].date()]={h['text']:1}
-    pickle.dump(d,open('tags','wb'))
+    pickle.dump(d,open('data/tags','wb'))
 
 def get_urls_per_day_csv():
     d={}
@@ -69,7 +69,7 @@ def get_urls_per_day_csv():
                             d[i['created_at'].date()][h['expanded_url']]=1
                     else:
                         d[i['created_at'].date()]={h['expanded_url']:1}
-    pickle.dump(d,open('urls','wb'))
+    pickle.dump(d,open('data/urls','wb'))
 
 def get_page_title(url):
     r = requests.get(url)
@@ -81,37 +81,37 @@ def get_page_title(url):
         return soup.title.string
 
 def convert_to_csv():
-    tweets = pickle.load(open('tweets','rb'))
-    tags = pickle.load(open('tags','rb'))
-    urls = pickle.load(open('urls','rb'))
+    tweets = pickle.load(open('data/tweets','rb'))
+    tags = pickle.load(open('data/tags','rb'))
+    urls = pickle.load(open('data/urls','rb'))
     dfTweets = pd.DataFrame(tweets.items(), columns=['Date', 'DateValue'])
-    dfTweets.to_csv('dateTweets.csv',index=False)
+    dfTweets.to_csv('data/dateTweets.csv',index=False)
     dfTags = pd.DataFrame(tags)
     dfTags.index.names = ['Hashtags']
     dfTags = dfTags.fillna(0)
     dfTags['total'] = dfTags.sum(axis=1)
     dfTags = dfTags.sort_values(by='total',ascending=False)
-    dfTags.to_csv('dateTags.csv')
+    dfTags.to_csv('data/dateTags.csv')
     dfUrls = pd.DataFrame(urls)
     dfUrls.index.names = ['Urls']
     dfUrls = dfUrls.fillna(0)
     dfUrls['total'] = dfUrls.sum(axis=1)
     dfUrls = dfUrls.sort_values(by='total',ascending=False)
-    dfUrls.to_csv('dateUrls.csv')
+    dfUrls.to_csv('data/dateUrls.csv')
 
 
 def update_results():
-    tweets = pd.read_csv('dateTags.csv')
-    tags = pd.read_csv('dateTags.csv')
-    urls = pd.read_csv('dateUrls.csv')
+    tweets = pd.read_csv('data/dateTags.csv')
+    tags = pd.read_csv('data/dateTags.csv')
+    urls = pd.read_csv('data/dateUrls.csv')
     dates =  (tags.columns)
     last_date = dates[-2]
     today =  datetime.datetime.combine(datetime.date.today(), datetime.time.min)
     start =  (datetime.datetime.strptime(last_date, "%Y-%m-%d").date())
     start = datetime.datetime.combine(start, datetime.time.min)
-    tweets = pickle.load(open('tweets','rb'))
-    tags = pickle.load(open('tags','rb'))
-    urls = pickle.load(open('urls','rb'))
+    tweets = pickle.load(open('data/tweets','rb'))
+    tags = pickle.load(open('data/tags','rb'))
+    urls = pickle.load(open('data/urls','rb'))
     iterator = coll.find({'created_at':{'$gt': start, '$lt':today}})
     for i in iterator:
         if i['created_at'].date() in tweets:
@@ -137,12 +137,12 @@ def update_results():
                             urls[i['created_at'].date()][h['expanded_url']]=1
                     else:
                         urls[i['created_at'].date()]={h['expanded_url']:1}
-    pickle.dump(tweets,open('tweets','wb'))
-    pickle.dump(tags,open('tags','wb'))
-    pickle.dump(urls,open('urls','wb'))
+    pickle.dump(tweets,open('data/tweets','wb'))
+    pickle.dump(tags,open('data/tags','wb'))
+    pickle.dump(urls,open('data/urls','wb'))
 
 def get_link_titles_to_csv():
-    df = pd.read_csv('dateUrls.csv')
+    df = pd.read_csv('data/dateUrls.csv')
     df=df[:10]
     df=df[['Urls','total']]
     linkTitles = []
@@ -151,7 +151,7 @@ def get_link_titles_to_csv():
         if title!='error':
             linkTitles.append(title)
     df['title']=linkTitles
-    df.to_csv('links_total.csv',index=False)
+    df.to_csv('data/links_total.csv',index=False)
 
 if twitter_init == 1:
     # Run once
