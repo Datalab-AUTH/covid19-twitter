@@ -30,14 +30,14 @@ value other than `1`) for subsequent use.
 ## Deployment
 
 Deployment is done using Docker. There is a docker image at
-`datalabauth/covid19-twitter`. You need to mount the app directory on
+`datalabauth/covid19-twitter`. You need to mount the `app/data` directory on
 the host, in order to have persistance for files.
 
 ```
 export MONGOURL="mongodb://user:pass@servername:port/dbname"
 export MONGODB="dbname"
 export MONGOCOLLECTION="mycollection"
-docker run -v /path/to/data:/app \
+docker run -v /host/path/to/data:/app/data \
 	-e MONGOURL \
 	-e MONGODB \
 	-e MONGOCOLLECTION \
