@@ -155,17 +155,17 @@ def get_link_titles_to_csv():
 
 if twitter_init == 1:
     # Run once
-    print("Initializing...")
+    print("Initializing on " + time.strftime("%Y-%m-%d %H:%M"))
     get_tags_per_day_csv()
     get_tweets_per_day_csv()
     get_urls_per_day_csv()
     convert_to_csv()
-    print("Done initializing.")
+    print("Done initializing on " + time.strftime("%Y-%m-%d %H:%M"))
 else:
     # Run daily
-    print("Updating on " + time.strftime("%Y-%m-%d %H:%M")) 
+    print("Updating on " + time.strftime("%Y-%m-%d %H:%M"))
     update_results()
     convert_to_csv()
     get_link_titles_to_csv()
-    print("Update finished")
+    print("Update finished on " + time.strftime("%Y-%m-%d %H:%M"))
 
