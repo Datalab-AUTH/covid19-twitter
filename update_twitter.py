@@ -143,7 +143,7 @@ def update_results():
 
 def get_link_titles_to_csv():
     df = pd.read_csv('data/dateUrls.csv')
-    df=df[:10]
+    df=df[:20]
     df=df[['Urls','total']]
     linkTitles = []
     for i in df['Urls']:
