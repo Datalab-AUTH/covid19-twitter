@@ -72,7 +72,8 @@ def get_urls_per_day_csv():
     pickle.dump(d,open('data/urls','wb'))
 
 def get_page_title(url):
-    r = requests.get(url)
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0'}
+    r = requests.get(url, headers = headers)
     html_content = r.text
     soup = BeautifulSoup(html_content, 'html.parser')
     print('Getting title for: ' + url)
