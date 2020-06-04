@@ -75,13 +75,13 @@ def get_page_title(url):
     r = requests.get(url)
     html_content = r.text
     soup = BeautifulSoup(html_content, 'html.parser')
-    print('Getting title for' + url)
+    print('Getting title for: ' + url)
     if soup.title is None:
-        print('Title is None')
+        print('  - No title')
     elif '403' in soup.title.string:
-        print('Error 403')
+        print('  - Error 403')
     else:
-        print('Title is: ' + soup.title.string)
+        print('  - Title is: ' + soup.title.string)
         return soup.title.string
     return url
 
